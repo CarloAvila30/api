@@ -16,41 +16,36 @@ def get_access_token():
     return r.json()["access_token"]
 
 @app.post("/create-order")
-def create_order(total: float):
-    token = get_access_token()
+def create_order():
+    access_token = get_access_token()
 
-    r = requests.post(
-        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "intent": "CAPTURE",
-            "purchase_units": [{
-                "amount": {
-                    "currency_code": "MXN",
-                    "value": f"{total:.2f}"
-                }
-            }],
-            "application_context": {
-                "return_url": "icehelados://paypal/success",
-                "cancel_url": "icehelados://paypal/cancel",
-                "user_action": "PAY_NOW"
-            }
-        }
-    )
-
-    data = r.json()
-
-    approval_url = next(
-        link["href"] for link in data["links"] if link["rel"] == "approve"
-    )
-
-    return {
-        "order_id": data["id"],
-        "approval_url": approval_url
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
     }
+
+    body = {
+        "intent": "CAPTURE",
+        "purchase_units": [{
+            "amount": {
+                "currency_code": "MXN",
+                "value": "50.00"
+            }
+        }],
+        "application_context": {
+            "return_url": "icehelados://paypal/success",
+            "cancel_url": "icehelados://paypal/cancel"
+        }
+    }
+
+    response = requests.post(
+        "https://api-m.sandbox.paypal.com/v2/checkout/orders",
+        json=body,
+        headers=headers
+    )
+
+    return response.json()
+
 
 @app.post("/capture-order/{order_id}")
 def capture_order(order_id: str):
