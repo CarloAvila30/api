@@ -16,7 +16,7 @@ def get_access_token():
     return r.json()["access_token"]
 
 @app.post("/create-order")
-def create_order():
+def create_order(total: float):
     access_token = get_access_token()
 
     headers = {
@@ -29,7 +29,7 @@ def create_order():
         "purchase_units": [{
             "amount": {
                 "currency_code": "MXN",
-                "value": "50.00"
+                "value": f"{total:.2f}"
             }
         }],
         "application_context": {
@@ -80,6 +80,7 @@ def capture_order(order_id: str):
     )
 
     return capture.json()
+
 
 
 
