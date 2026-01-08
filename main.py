@@ -3,8 +3,8 @@ import requests, base64
 
 app = FastAPI()
 
-CLIENT_ID = "ARIXux5BLyahmVtkPjXqCDADnf_SI3A0af0H02D70lU1HSZXARi8QcdZ3TblmH3BMaMjpxRxgUqDZO8H"
-SECRET = "EJG-haKOAruuzpfOM040n6nQxml8ZU98sPKHinaimm77gHRe89I3NGfirtVmBWRtgvzc1ZChCHKMoM7r"
+CLIENT_ID = "AbXIB79YpijR2bd41TmLj3GR0_jAvnkMVxrCPWYYZ8uvOZiGZ08LGITF-9Np8vV7_zvP9fzxFw66_Z42"
+SECRET = "EOeQ-05phldhPD8K_Db2-JWqgHlafFUweNyAhhqVZteBUni-CHp2i3m2Qdw2D_98S5s-1SpzScqnIRRy"
 
 def get_access_token():
     auth = base64.b64encode(f"{CLIENT_ID}:{SECRET}".encode()).decode()
@@ -80,6 +80,7 @@ def capture_order(order_id: str):
     )
 
     return capture.json()
+
 
 
 
