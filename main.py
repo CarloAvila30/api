@@ -63,6 +63,8 @@ def capture_order(order_id: str):
     )
 
     order_data = check.json()
+    print("ORDER STATUS:", order_data.get("status"))
+
 
     # 🔒 SI NO ESTÁ APROBADA, NO CAPTURAR
     if order_data.get("status") != "APPROVED":
@@ -78,5 +80,6 @@ def capture_order(order_id: str):
     )
 
     return capture.json()
+
 
 
