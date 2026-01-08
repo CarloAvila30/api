@@ -13,6 +13,10 @@ def get_access_token():
         headers={"Authorization": f"Basic {auth}"},
         data={"grant_type": "client_credentials"}
     )
+
+    print("PAYPAL TOKEN RESPONSE:", r.status_code, r.text)
+
+    
     return r.json()["access_token"]
 
 @app.post("/create-order")
@@ -80,6 +84,7 @@ def capture_order(order_id: str):
     )
 
     return capture.json()
+
 
 
 
