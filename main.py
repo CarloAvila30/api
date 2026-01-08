@@ -31,7 +31,8 @@ def create_order(total: float):
             }],
             "application_context": {
                 "return_url": "icehelados://paypal/success",
-                "cancel_url": "icehelados://paypal/cancel"
+                "cancel_url": "icehelados://paypal/cancel",
+                "user_action": "PAY_NOW"
             }
         }
     )
