@@ -51,13 +51,32 @@ def create_order():
 def capture_order(order_id: str):
     token = get_access_token()
 
-    r = requests.post(
-        f"https://api-m.sandbox.paypal.com/v2/checkout/orders/{order_id}/capture",
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json"
-        }
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    # 1️⃣ CONSULTAR EL ESTADO DE LA ORDEN
+    check = requests.get(
+        f"https://api-m.sandbox.paypal.com/v2/checkout/orders/{order_id}",
+        headers=headers
     )
 
-    return r.json()
+    order_data = check.json()
+
+    # 🔒 SI NO ESTÁ APROBADA, NO CAPTURAR
+    if order_data.get("status") != "APPROVED":
+        return {
+            "error": "Order not approved",
+            "status": order_data.get("status")
+        }
+
+    # 2️⃣ CAPTURAR SOLO SI ESTÁ APPROVED
+    capture = requests.post(
+        f"https://api-m.sandbox.paypal.com/v2/checkout/orders/{order_id}/capture",
+        headers=headers
+    )
+
+    return capture.json()
+
 
